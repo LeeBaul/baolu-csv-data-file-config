@@ -11,5 +11,12 @@
 
     <artifactId>baolu-csv-data-file-config</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.jmeter</groupId>
+            <artifactId>ApacheJMeter_core</artifactId>
+            <version>5.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
