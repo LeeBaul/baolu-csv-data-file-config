@@ -25,7 +25,7 @@ import java.io.IOException;
  * @version 1.0
  * @date 2020/7/23 22:34
  **/
-public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopIterationListener {
+public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopIterationListener,TestStateListener {
 
     private static final Logger log = LoggerFactory.getLogger(BaoluCSVDataSet.class);
 
@@ -137,8 +137,8 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         }
     }
 
-  /*  public void testStarted() {
-
+    public void testStarted() {
+        //开始操作
     }
 
     public void testStarted(String s) {
@@ -146,12 +146,12 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testEnded() {
-
+        //结束后操作
     }
 
     public void testEnded(String s) {
-
-    }*/
+        testEnded();
+    }
 
     /**
      * trim content of array varNames
