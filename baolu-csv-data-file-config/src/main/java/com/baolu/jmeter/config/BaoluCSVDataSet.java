@@ -56,6 +56,11 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     private boolean ignoreFirstLine = false;
 
+    /**
+     * 是否为每个线程分配数据
+     */
+    private boolean allocateData = false;
+
     public BaoluCSVDataSet(){
 
     }
@@ -138,7 +143,8 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testStarted() {
-        //开始操作
+        //开始操作 此处为调试代码
+        log.info("===================================[{}]",isAllocateData());
     }
 
     public void testStarted(String s) {
@@ -260,5 +266,20 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      */
     public void setIgnoreFirstLine(boolean ignoreFirstLine) {
         this.ignoreFirstLine = ignoreFirstLine;
+    }
+
+    /**
+     * @return the allocateData
+     */
+    public boolean isAllocateData() {
+        return allocateData;
+    }
+
+    /**
+     *
+     * @param allocateData the allocateData to set
+     */
+    public void setAllocateData(boolean allocateData) {
+        this.allocateData = allocateData;
     }
 }

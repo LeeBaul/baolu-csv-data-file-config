@@ -27,6 +27,8 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
+    private static final String ALLOCATE_DATA = "allocateData";       //$NON-NLS-1$  Allocate data for each thread
+
 
     // Access needed from CSVDataSet
     private static final String[] SHARE_TAGS = new String[3];
@@ -47,7 +49,7 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
         createPropertyGroup("csv_data",             //$NON-NLS-1$
                 new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES,
                         IGNORE_FIRST_LINE, DELIMITER, QUOTED_DATA,
-                        RECYCLE, STOPTHREAD, SHAREMODE});
+                        RECYCLE, STOPTHREAD, SHAREMODE,ALLOCATE_DATA});
 
         PropertyDescriptor p = property(FILENAME);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -93,6 +95,13 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_OTHER, Boolean.FALSE);
         p.setValue(NOT_EXPRESSION, Boolean.FALSE);
         p.setValue(TAGS, SHARE_TAGS);
+
+        /**
+         * CSV Data Set Config Allocate data for each thread add by libaolu
+         */
+        p = property(ALLOCATE_DATA);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
 
     }
 
