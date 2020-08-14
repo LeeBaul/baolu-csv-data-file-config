@@ -60,6 +60,10 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      * 是否为每个线程分配数据
      */
     private boolean allocateData = false;
+    /**
+     * 自动分配
+     */
+    private boolean automaticallyAllocate = true;
 
     public BaoluCSVDataSet(){
 
@@ -281,5 +285,20 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      */
     public void setAllocateData(boolean allocateData) {
         this.allocateData = allocateData;
+    }
+
+    /**
+     * @return the automaticallyAllocate
+     */
+    public boolean isAutomaticallyAllocate() {
+        return automaticallyAllocate;
+    }
+
+    /**
+     *
+     * @param automaticallyAllocate Automatically allocate block size
+     */
+    public void setAutomaticallyAllocate(boolean automaticallyAllocate) {
+        this.automaticallyAllocate = automaticallyAllocate;
     }
 }

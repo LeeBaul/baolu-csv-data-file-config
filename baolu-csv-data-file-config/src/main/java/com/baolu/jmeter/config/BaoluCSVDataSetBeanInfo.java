@@ -28,6 +28,7 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
     private static final String ALLOCATE_DATA = "allocateData";       //$NON-NLS-1$  Allocate data for each thread
+    private static final String AUTOMATICALLY_ALLOCATE = "automaticallyAllocate";   //$NON-NLS-1$  Automatically allocate block size
 
 
     // Access needed from CSVDataSet
@@ -49,7 +50,7 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
         createPropertyGroup("csv_data",             //$NON-NLS-1$
                 new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES,
                         IGNORE_FIRST_LINE, DELIMITER, QUOTED_DATA,
-                        RECYCLE, STOPTHREAD, SHAREMODE,ALLOCATE_DATA});
+                        RECYCLE, STOPTHREAD, SHAREMODE,ALLOCATE_DATA,AUTOMATICALLY_ALLOCATE});
 
         PropertyDescriptor p = property(FILENAME);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -97,11 +98,17 @@ public class BaoluCSVDataSetBeanInfo extends BeanInfoSupport {
         p.setValue(TAGS, SHARE_TAGS);
 
         /**
-         * CSV Data Set Config Allocate data for each thread add by libaolu
+         * Allocate data for each thread add by libaolu
          */
         p = property(ALLOCATE_DATA);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
+        /**
+         * Automatically allocate block size add by libaolu
+         */
+        p = property(AUTOMATICALLY_ALLOCATE);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
 
     }
 
