@@ -54,13 +54,19 @@ public class CsvFileReadPerThreads {
      * 当前线程读取位置
      */
     private Map<Integer,Integer> curThreadPos;
+    /**
+     * 每个线程分得数据块大小
+     */
+    private int blockSizePerThread;
 
 
-    public CsvFileReadPerThreads(String alias ,String encoding,String delimiter) throws IOException {
+
+    public CsvFileReadPerThreads(String alias ,String encoding,String delimiter,int blockSize) throws IOException {
         csvFileName = alias;
         csvfileEncoding = encoding;
         delim = delimiter;
         csvFiledata = new ArrayList<>();
+        blockSizePerThread = blockSize;
         LoadCsvFile();
     }
 

@@ -111,7 +111,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
             if (isAllocateData()){//用户选择了为线程分配数据块，初始化文件。
                 try {
-                    csvFileReadPerThreads = new CsvFileReadPerThreads(alias,fileEncoding,delim);
+                    csvFileReadPerThreads = new CsvFileReadPerThreads(alias,fileEncoding,delim,getBlockSize());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
