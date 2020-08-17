@@ -92,7 +92,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             String fileName = getFilename().trim();
             String mode = getShareMode();
             int modeInt = BaoluCSVDataSetBeanInfo.getShareModeAsInt(mode);
-            final String names = getVariableNames();
+            String names = getVariableNames();
             String header;
             switch(modeInt){
                 case BaoluCSVDataSetBeanInfo.SHARE_ALL:
