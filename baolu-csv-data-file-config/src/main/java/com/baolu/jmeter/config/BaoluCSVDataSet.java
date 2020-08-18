@@ -191,11 +191,17 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      * @return
      */
     public String[] itemParaSetVars(String[] paraArr, String delim){
-        String[] params = JOrphanUtils.split(paraArr[(this.curParaPos - 1)], delim, false);
-        if (this.curParaPos == paraArr.length) {
-            this.curParaPos = 1;
+        String[] params = JOrphanUtils.split(paraArr[(curParaPos - 1)], delim, false);
+        if (curParaPos == paraArr.length) {
+            curParaPos = 1;
+            if (log.isDebugEnabled()){
+                log.debug("current offset is [{}],max offset is [{}]",curParaPos,paraArr.length);
+            }
         }else {
-            this.curParaPos += 1;
+            curParaPos += 1;
+        }
+        if (log.isDebugEnabled()){
+            log.debug("current threadNum [{}],next offset is [{}],current element array is [{}]",Thread.currentThread().getName(),curParaPos,params);
         }
         return params;
     }
@@ -221,11 +227,20 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             blockSize = server.getBlockSize(context, totalLines);
         }else {
             blockSize = getBlockSize();
+            if (blockSize <= 0){
+                log.warn("BlockSize can not be less than zero.Automatically allocate block size by default");
+                blockSize = server.getBlockSize(context, totalLines);
+            }else if (blockSize > totalLines){
+                log.warn("BlockSize is greater than csv file total lines,the blockSize does not take effect.Automatically allocate block size by default");
+                blockSize = server.getBlockSize(context, totalLines);
+            }
+
         }
         startLine = server.getstartLine(context, blockSize);
-        log.info("totalLines[{}],blockSize[{}],startLine[{}]",totalLines,blockSize,startLine);
         blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
-        log.info("cur thread is [{}] blockPara[{}]",Thread.currentThread().getName(),blockPara);
+        if (log.isDebugEnabled()){
+            log.debug("current threadNum [{}],blockPara is [{}]",Thread.currentThread().getName(),blockPara);
+        }
         return blockPara;
     }
 
