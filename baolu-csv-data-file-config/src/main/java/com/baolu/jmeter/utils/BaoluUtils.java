@@ -14,13 +14,8 @@ public class BaoluUtils {
     }
 
     public static int getThreadIndex(String JMeterThreadName){
-        int index = JMeterThreadName.lastIndexOf(" ");
-        if (index > 0){
-            String tmpStr = JMeterThreadName.substring(index + 1);
-            String args[] = tmpStr.split("-");
-            index = Integer.valueOf(args[1]);
-        }
-        return index;
+        String index = JMeterThreadName.substring(JMeterThreadName.lastIndexOf('-') + 1);
+        return Integer.valueOf(index);
     }
 
     public static void main(String[] args) {
