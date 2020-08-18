@@ -22,9 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  * @dateTime 2020/8/17 16:42
  **/
-public class CsvFileReadPerThreads {
+public class BaoluCSVFileReader {
 
-    private static final Logger log = LoggerFactory.getLogger(CsvFileReadPerThreads.class);
+    private static final Logger log = LoggerFactory.getLogger(BaoluCSVFileReader.class);
     /**
      * 开始位置
      */
@@ -76,7 +76,7 @@ public class CsvFileReadPerThreads {
 
 
 
-    public CsvFileReadPerThreads(String alias ,String encoding,String delimiter,int blockSize,
+    public BaoluCSVFileReader(String alias ,String encoding,String delimiter,int blockSize,
                                  boolean loopReadCsvData,boolean readfirstLine,boolean stopThreadReadCsvFile) throws IOException {
         startPos = 1;
         curPos = 1;

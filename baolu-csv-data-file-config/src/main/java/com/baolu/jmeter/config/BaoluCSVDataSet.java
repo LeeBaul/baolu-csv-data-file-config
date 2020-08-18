@@ -1,6 +1,6 @@
 package com.baolu.jmeter.config;
 
-import com.baolu.jmeter.services.CsvFileReadPerThreads;
+import com.baolu.jmeter.services.BaoluCSVFileReader;
 import com.baolu.jmeter.services.FileServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -71,7 +71,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      */
     private int blockSize = 0;
 
-    private CsvFileReadPerThreads csvFileReadPerThreads;
+    private BaoluCSVFileReader baoluCSVFileReader;
 
     public BaoluCSVDataSet(){
 
@@ -164,7 +164,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         }
         if (isAllocateData()){//用户选择了为线程分配数据块，初始化文件。
             try {
-                csvFileReadPerThreads = new CsvFileReadPerThreads(alias,fileEncoding,delimiter,getBlockSize()
+                baoluCSVFileReader = new BaoluCSVFileReader(alias,fileEncoding,delimiter,getBlockSize()
                         ,getRecycle(),isIgnoreFirstLine(),getStopThread());
             } catch (IOException e) {
                 e.printStackTrace();
