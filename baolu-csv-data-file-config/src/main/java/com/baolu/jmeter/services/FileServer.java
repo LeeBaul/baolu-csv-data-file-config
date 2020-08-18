@@ -570,7 +570,7 @@ public class FileServer {
             if (blockSize >= 1) {
                 paramArr = new String[blockSize];
                 if (blockSize < 1) {
-                    log.error("ArrayIndexOutOfBounds");
+                    log.error("blockSize can not be less than 1");
                 }
                 int k = blockSize + startNumber;
                 int i = startNumber + 1;

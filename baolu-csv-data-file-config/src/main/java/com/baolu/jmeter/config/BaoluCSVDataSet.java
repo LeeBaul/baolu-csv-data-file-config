@@ -1,6 +1,5 @@
 package com.baolu.jmeter.config;
 
-import com.baolu.jmeter.services.BaoluCSVFileReader;
 import com.baolu.jmeter.services.FileServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -71,7 +70,15 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      */
     private int blockSize = 0;
 
-    private BaoluCSVFileReader baoluCSVFileReader;
+    /**
+     * 数据块
+     */
+    private String[] blockPara = null;
+
+    /**
+     * 当前位置
+     */
+    private int curParaPos = 1;
 
     public BaoluCSVDataSet(){
 
@@ -79,7 +86,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void iterationStart(LoopIterationEvent loopIterationEvent) {
         FileServer server = FileServer.getFileServer();
-        final JMeterContext context = getThreadContext();
+        JMeterContext context = getThreadContext();
         String delim = getDelimiter();
         if ("\\t".equals(delim)) { // $NON-NLS-1$
             delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
@@ -87,7 +94,9 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             log.debug("Empty delimiter, will use ','");
             delim=",";
         }
-
+        if (isAllocateData()){
+            getThreadsBlockData(server,getRecycle(),isIgnoreFirstLine());
+        }
         if (vars == null) {
             String fileName = getFilename().trim();
             String mode = getShareMode();
@@ -118,7 +127,9 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
                     throw new IllegalArgumentException("Could not split CSV header line from file:" + fileName,e);
                 }
             } else {
-                server.reserveFile(fileName, getFileEncoding(), alias, ignoreFirstLine);
+                if (!isAllocateData()){
+                    server.reserveFile(fileName, getFileEncoding(), alias, ignoreFirstLine);
+                }
                 vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
             }
             trimVarNames(vars);
@@ -128,7 +139,9 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         JMeterVariables threadVars = context.getVariables();
         String[] lineValues = {};
         try {
-            if (getQuotedData()) {
+            if (isAllocateData()){
+                lineValues = itemParaSetVars(blockPara, delim);
+            }else if (getQuotedData()) {
                 lineValues = server.getParsedLine(alias, recycle,
                         firstLineIsNames || ignoreFirstLine, delim.charAt(0));
             } else {
@@ -156,20 +169,6 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testStarted() {
-        String delimiter = getDelimiter();
-        if ("\\t".equals(delimiter)) { // $NON-NLS-1$
-            delimiter = "\t";
-        } else if (delimiter.isEmpty()){
-            delimiter=",";
-        }
-        if (isAllocateData()){//用户选择了为线程分配数据块，初始化文件。
-            try {
-                baoluCSVFileReader = new BaoluCSVFileReader(alias,fileEncoding,delimiter,getBlockSize()
-                        ,getRecycle(),isIgnoreFirstLine(),getStopThread());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 
@@ -183,6 +182,51 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void testEnded(String s) {
         testEnded();
+    }
+
+    /**
+     * create by libaolu
+     * @param paraArr 被分割数组
+     * @param delim 分隔符
+     * @return
+     */
+    public String[] itemParaSetVars(String[] paraArr, String delim){
+        String[] params = JOrphanUtils.split(paraArr[(this.curParaPos - 1)], delim, false);
+        if (this.curParaPos == paraArr.length) {
+            this.curParaPos = 1;
+        }else {
+            this.curParaPos += 1;
+        }
+        return params;
+    }
+
+    /**
+     * create by libaolu
+     * @param recycle 默认true
+     * @param ignoreFirstLine 默认false
+     * @return
+     */
+    public String[] getThreadsBlockData(FileServer server,boolean recycle, boolean ignoreFirstLine){
+        JMeterContext context = getThreadContext();
+        String fileName = getFilename();
+        int totalLines = 0;
+        int blockSize = 0;
+        int startLine = 0;
+
+        if (totalLines == 0){
+            totalLines = server.getTotalLines(fileName, ignoreFirstLine);
+        }
+
+        if (isAutomaticallyAllocate()){
+            blockSize = server.getBlockSize(context, totalLines);
+        }else {
+            blockSize = getBlockSize();
+        }
+        startLine = server.getstartLine(context, blockSize);
+        log.info("totalLines[{}],blockSize[{}],startLine[{}]",totalLines,blockSize,startLine);
+        blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
+        log.info("cur thread is [{}] blockPara[{}]",Thread.currentThread().getName(),blockPara);
+        return blockPara;
     }
 
     /**
