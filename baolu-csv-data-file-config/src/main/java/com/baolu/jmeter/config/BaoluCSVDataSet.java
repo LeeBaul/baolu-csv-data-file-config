@@ -109,14 +109,6 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
                     break;
             }
 
-            if (isAllocateData()){//用户选择了为线程分配数据块，初始化文件。
-                try {
-                    csvFileReadPerThreads = new CsvFileReadPerThreads(alias,fileEncoding,delim,getBlockSize());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
             if (StringUtils.isEmpty(names)) {
                 header = server.reserveFile(fileName, getFileEncoding(), alias, true);
                 try {
@@ -164,8 +156,21 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testStarted() {
-        //开始操作 此处为调试代码
-        log.info("===================================[{}]",isAllocateData());
+        String delimiter = getDelimiter();
+        if ("\\t".equals(delimiter)) { // $NON-NLS-1$
+            delimiter = "\t";
+        } else if (delimiter.isEmpty()){
+            delimiter=",";
+        }
+        if (isAllocateData()){//用户选择了为线程分配数据块，初始化文件。
+            try {
+                csvFileReadPerThreads = new CsvFileReadPerThreads(alias,fileEncoding,delimiter,getBlockSize()
+                        ,getRecycle(),isIgnoreFirstLine(),getStopThread());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void testStarted(String s) {
