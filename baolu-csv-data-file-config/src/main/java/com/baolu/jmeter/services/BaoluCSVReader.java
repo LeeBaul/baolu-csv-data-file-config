@@ -14,13 +14,15 @@ public class BaoluCSVReader {
 
     private static final Logger log = LoggerFactory.getLogger(BaoluCSVReader.class);
 
-    private final BaoluCSVFilePerThread baoluCSVFilePerThread;
+   /* private final BaoluCSVFilePerThread baoluCSVFilePerThread;
 
     public BaoluCSVReader (BaoluCSVFilePerThread bcfp) {
         baoluCSVFilePerThread = bcfp;
-    }
+    }*/
 
-    public String[] getCsvDataPerThreads(int JMeterThreadNum){
+    /*public String[] getCsvDataPerThreads(int JMeterThreadNum){
         return baoluCSVFilePerThread.getCsvDataPerThreads(JMeterThreadNum);
-    }
+    }*/
+
+
 }
