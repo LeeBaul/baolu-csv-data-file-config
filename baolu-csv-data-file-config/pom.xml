@@ -10,12 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>baolu-csv-data-file-config</artifactId>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jmeter-version>5.1.1</jmeter-version>
-    </properties>
+    <packaging>jar</packaging>
     
     <build>
         <resources>
@@ -36,9 +31,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <target>1.8</target>
-                    <source>1.8</source>
-                    <encoding>UTF-8</encoding>
+                    <target>${java.version}</target>
+                    <source>${java.version}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
         </plugins>
@@ -48,7 +43,7 @@
         <dependency>
             <groupId>org.apache.jmeter</groupId>
             <artifactId>ApacheJMeter_core</artifactId>
-            <version>${jmeter-version}</version>
+            <version>${jmeter.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

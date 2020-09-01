@@ -12,5 +12,11 @@
         <module>baolu-csv-data-file-config</module>
     </modules>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <jmeter.version>5.1.1</jmeter.version>
+    </properties>
 
 </project>
