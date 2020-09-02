@@ -1,6 +1,7 @@
 package com.baolu.jmeter.config;
 
 import com.baolu.jmeter.services.FileServer;
+import com.baolu.jmeter.utils.BaoluUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -17,6 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.baolu.jmeter.utils.BaoluUtils.getResourceFileAsText;
 
 /**
  * <p/>
@@ -71,14 +76,14 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     private int blockSize = 0;
 
     /**
-     * 数据块
-     */
-    private String[] blockPara = null;
-
-    /**
      * 当前位置
      */
-    private int curParaPos = 1;
+    private ThreadLocal<Integer>  curParaPos =  new ThreadLocal<>();
+
+    /**
+     * 线程数据
+     */
+    private final Map<Integer,String[]> curThreadsCsvFileData = new ConcurrentHashMap<>();
 
     public BaoluCSVDataSet(){
 
@@ -140,7 +145,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         String[] lineValues = {};
         try {
             if (isAllocateData()){
-                lineValues = itemParaSetVars(blockPara, delim);
+                lineValues = itemParaSetVars(delim);
             }else if (getQuotedData()) {
                 lineValues = server.getParsedLine(alias, recycle,
                         firstLineIsNames || ignoreFirstLine, delim.charAt(0));
@@ -169,7 +174,12 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testStarted() {
-
+        String pluginsShow = JMeterUtils.getProperty("baolu-jmeter-plugins");
+        log.info("pluginsShow[{}]",pluginsShow);
+        if (StringUtils.isEmpty(pluginsShow)){
+            log.info(System.getProperty("line.separator")+""+getResourceFileAsText("banner/banner.txt"));
+            JMeterUtils.setProperty("baolu-jmeter-plugins","show");
+        }
     }
 
     public void testStarted(String s) {
@@ -177,7 +187,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     }
 
     public void testEnded() {
-        //结束后操作
+        curThreadsCsvFileData.clear();
     }
 
     public void testEnded(String s) {
@@ -186,19 +196,23 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     /**
      * create by libaolu
-     * @param paraArr 被分割数组
      * @param delim 分隔符
      * @return
      */
-    public String[] itemParaSetVars(String[] paraArr, String delim){
-        String[] params = JOrphanUtils.split(paraArr[(curParaPos - 1)], delim, false);
-        if (curParaPos == paraArr.length) {
-            curParaPos = 1;
+    public String[] itemParaSetVars(String delim){
+        if ((curParaPos.get() == null)){
+            curParaPos.set(1);
+        }
+        int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
+        String[] paraArr = curThreadsCsvFileData.get(threadNum);
+        String[] params = JOrphanUtils.split(paraArr[(curParaPos.get() - 1)], delim, false);
+        if (curParaPos.get() == paraArr.length) {
+            curParaPos.set(1);
             if (log.isDebugEnabled()){
                 log.debug("current offset is [{}],max offset is [{}]",curParaPos,paraArr.length);
             }
         }else {
-            curParaPos += 1;
+            curParaPos.set(curParaPos.get()+1);
         }
         if (log.isDebugEnabled()){
             log.debug("current threadNum [{}],next offset is [{}],current element array is [{}]",Thread.currentThread().getName(),curParaPos,params);
@@ -212,16 +226,12 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      * @param ignoreFirstLine 默认false
      * @return
      */
-    public String[] getThreadsBlockData(FileServer server,boolean recycle, boolean ignoreFirstLine){
+    public void getThreadsBlockData(FileServer server,boolean recycle, boolean ignoreFirstLine){
         JMeterContext context = getThreadContext();
         String fileName = getFilename();
-        int totalLines = 0;
-        int blockSize = 0;
-        int startLine = 0;
-
-        if (totalLines == 0){
-            totalLines = server.getTotalLines(fileName, ignoreFirstLine);
-        }
+        int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
+        int totalLines = server.getCsvFileRows(fileName, ignoreFirstLine);
+        int blockSize;
 
         if (isAutomaticallyAllocate()){
             blockSize = server.getBlockSize(context, totalLines);
@@ -236,12 +246,16 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             }
 
         }
-        startLine = server.getstartLine(context, blockSize);
-        blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
-        if (log.isDebugEnabled()){
-            log.debug("current threadNum [{}],blockPara is [{}]",Thread.currentThread().getName(),blockPara);
+
+        int startLine = server.getstartLine(context, blockSize);
+        if (curThreadsCsvFileData.get(threadNum) == null) {//判断当前线程分配的文件是否已经缓存
+            String[] blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
+            curThreadsCsvFileData.put(threadNum,blockPara);
+            if (log.isDebugEnabled()){
+                log.debug("current threadNum [{}],blockPara is [{}]",Thread.currentThread().getName(),blockPara);
+            }
         }
-        return blockPara;
+
     }
 
     /**
