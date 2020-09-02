@@ -1,5 +1,9 @@
 package com.baolu.jmeter.utils;
 
+
+import java.io.*;
+import java.util.stream.Collectors;
+
 /**
  * <p/>
  * 工具类
@@ -18,8 +22,24 @@ public class BaoluUtils {
         return Integer.valueOf(index);
     }
 
+    public static String getResourceFileAsText(String name) {
+        try {
+            String lineEnd = System.getProperty("line.separator");
+            InputStream is = BaoluUtils.class.getClassLoader().getResourceAsStream(name);
+            if (is != null)
+                try(Reader in = new InputStreamReader(is);
+                    BufferedReader fileReader = new BufferedReader(in)) {
+                    return fileReader.lines()
+                            .collect(Collectors.joining(lineEnd, "", ""));
+                }
+            return "";
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
     public static void main(String[] args) {
-        int index = BaoluUtils.getThreadIndex("bzm - Arrivals Thread Group 1-1");
-        System.out.println(index);
+        int index = BaoluUtils.getThreadIndex("bzm - Arrivals Thread Group 1-12");
+        System.out.println( getResourceFileAsText("banner/libaolu.txt"));
     }
 }
