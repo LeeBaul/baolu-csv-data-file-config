@@ -38,8 +38,4 @@ public class BaoluUtils {
         }
     }
 
-    public static void main(String[] args) {
-        int index = BaoluUtils.getThreadIndex("bzm - Arrivals Thread Group 1-12");
-        System.out.println( getResourceFileAsText("banner/libaolu.txt"));
-    }
 }
