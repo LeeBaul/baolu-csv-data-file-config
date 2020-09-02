@@ -630,19 +630,18 @@ public class FileServer {
      * @param ignoreFirstLine 是否忽略文件首行
      * @return 文件总行数
      */
-    public int getTotalLines(String filePath, boolean ignoreFirstLine){
+    public int getCsvFileRows(String filePath, boolean ignoreFirstLine){
         File file = new File(filePath);
-        int lines = 0;
+        int rows = 0;
         try {
             FileReader in = new FileReader(file);
             LineNumberReader reader = new LineNumberReader(in);
-            String s = null;
+            String line = null;
             if (ignoreFirstLine)
-                s = reader.readLine();
-            while ((s = reader.readLine()) != null) {
-                ++lines;
+                line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                ++rows;
             }
-            log.info("the total number of lines in the file is : " + lines);
             reader.close();
             in.close();
         }catch (FileNotFoundException e) {
@@ -650,6 +649,6 @@ public class FileServer {
         }catch (IOException e) {
             e.printStackTrace();
         }
-        return lines;
+        return rows;
     }
 }
