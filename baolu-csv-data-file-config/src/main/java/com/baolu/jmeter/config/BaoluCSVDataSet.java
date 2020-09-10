@@ -78,7 +78,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     /**
      * 当前位置
      */
-    private final ThreadLocal<Integer>  curParaPos =  new ThreadLocal<>();
+    private static final ThreadLocal<Integer>  curParaPos =  new ThreadLocal<>();
 
     /**
      * 线程数据
