@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -84,6 +85,11 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
      * 线程数据
      */
     private final Map<Integer,String[]> curThreadsCsvFileData = new ConcurrentHashMap<>();
+
+    /**
+     * 固定结尾
+     */
+    private static final String [] PARAMS_EOF = {"<EOF>"};
 
     public BaoluCSVDataSet(){
 
@@ -161,7 +167,15 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         } catch (IOException e) { // treat the same as EOF
             log.error(e.toString());
         }
-
+        /**
+         * Allocate data for each thread and reached End of per thread of str array stop thread
+         */
+        if (isAllocateData() && getStopThread()) {
+            if (curParaPos.get() < 0){
+                throw new JMeterStopThreadException("End of file:"+ getFilename()+" detected for CSV DataSet:"
+                        +getName()+" configured with stopThread:"+ getStopThread()+", recycle:" + getRecycle());
+            }
+        }
         if (lineValues.length == 0) {// i.e. EOF
             if (getStopThread()) {
                 throw new JMeterStopThreadException("End of file:"+ getFilename()+" detected for CSV DataSet:"
@@ -204,10 +218,33 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             curParaPos.set(1);
         }
         int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
+        if (getStopThread()){
+            String[] paraArrOld = curThreadsCsvFileData.get(threadNum);
+            /**
+              * For per thread of str array connect PARAMS_EOF array only when
+              * reached End of per thread of str array stop thread.Prevent the
+              * problem of reading per thread of str array values the last one
+              * param is missing.
+            */
+            if (!"<EOF>".equals(paraArrOld[paraArrOld.length-1])){
+                String[] paraArrNew = new String[paraArrOld.length + 1];
+                System.arraycopy(paraArrOld, 0, paraArrNew, 0, paraArrOld.length);
+                System.arraycopy(PARAMS_EOF, 0, paraArrNew, paraArrOld.length, PARAMS_EOF.length);
+                curThreadsCsvFileData.put(threadNum,paraArrNew);
+            }
+        }
         String[] paraArr = curThreadsCsvFileData.get(threadNum);
         String[] params = JOrphanUtils.split(paraArr[(curParaPos.get() - 1)], delim, false);
         if (curParaPos.get() == paraArr.length) {
-            curParaPos.set(1);
+            if (getStopThread()){
+                /**
+                 * So set curParaPos value is -1 do that each thread reads its own block
+                 * data,it needs to stop current thread.
+                 */
+                curParaPos.set(-1);
+            }else {
+                curParaPos.set(1);
+            }
             if (log.isDebugEnabled()){
                 log.debug("current offset is [{}],max offset is [{}]",curParaPos,paraArr.length);
             }
