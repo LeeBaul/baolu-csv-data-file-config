@@ -6,4 +6,4 @@
   \:\__\\:\__\        \::/  /   /:/  /  \::/  /  \:\__\\::/  /
    \/__/ \/__/         \/__/    \/__/    \/__/    \/__/ \/__/
 
-Initializing..... baolu-jmeter-plugins V1.0.0
+Initializing..... baolu-jmeter-plugins V1.1.0
