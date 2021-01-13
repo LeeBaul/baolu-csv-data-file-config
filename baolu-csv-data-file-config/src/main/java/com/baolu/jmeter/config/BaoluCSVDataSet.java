@@ -189,7 +189,6 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void testStarted() {
         String pluginsShow = JMeterUtils.getProperty("baolu-jmeter-plugins");
-        log.info("pluginsShow[{}]",pluginsShow);
         if (StringUtils.isEmpty(pluginsShow)){
             log.info(System.getProperty("line.separator")+""+getResourceFileAsText("banner/banner.txt"));
             JMeterUtils.setProperty("baolu-jmeter-plugins","show");
