@@ -1,4 +1,4 @@
-package com.libaolu.jmeter.functions;
+package com.baolu.jmeter.functions;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.AbstractFunction;
