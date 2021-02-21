@@ -11,6 +11,7 @@
     <modules>
         <module>baolu-csv-data-file-config</module>
         <module>baolu-functions</module>
+        <module>baolu-aggregate-tps-report</module>
     </modules>
 
     <properties>
