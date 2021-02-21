@@ -206,7 +206,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         opts.add(saveTable, BorderLayout.CENTER);
         opts.add(saveHeaders, BorderLayout.EAST);
         opts.add(calcTps, BorderLayout.EAST);
-        calcTps.setSelected(false);
+        calcTps.setSelected(true);
         this.add(opts,BorderLayout.SOUTH);
 
         new Timer(REFRESH_PERIOD, e -> {
