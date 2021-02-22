@@ -21,8 +21,9 @@ package com.baolu.jmeter.visualizers;
 import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Sample;
-import org.apache.jorphan.math.StatCalculatorLong;
+import com.baolu.jmeter.math.StatCalculatorLong;
 
 /**
  * Aggregate sample data container. Just instantiate a new instance of this
@@ -206,12 +207,14 @@ public class SamplingStatCalculator {
         synchronized (calculator) {
             if (calcTps){//统计tps 不统计失败请求RT
                 if (res.isSuccessful()){
-                    calculator.addValue(res.getTime(), res.getSampleCount());
+                    calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount());
                 }else {
-                    calculator.addValue(0L, res.getSampleCount());
+                    //只要失败的时候才设置rt为0，来规避StatCalculator中min值为0的耗时计算
+                    JMeterUtils.setProperty("baolu-aggregate-tps-report","CALC_TPS");
+                    calculator.addValue(0L, res.getSampleCount(),res.getErrorCount());//
                 }
             }else {//统计吞吐量 也统计失败请求RT
-                calculator.addValue(res.getTime(), res.getSampleCount());
+                calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount());
             }
             calculator.addBytes(res.getBytesAsLong());
             calculator.addSentBytes(res.getSentBytes());
