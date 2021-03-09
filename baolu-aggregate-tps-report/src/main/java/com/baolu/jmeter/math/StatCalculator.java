@@ -220,7 +220,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         // For n same values in sum of square is equal to n*val^2
         sumOfSquares += currentVal * currentVal * sampleCount;
         updateValueCount(val, sampleCount);
-        calculateDerivedValues(val);
+        calculateDerivedValues(val,false);
     }
 
     /**
@@ -229,8 +229,9 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * @param val the aggregate value, normally the elapsed time
      * @param sampleCount the number of samples contributing to the aggregate value
      * @param errorSampleCount the number of error samples contributing to the aggregate value
+     * @param calc_tps calc tps flag
      */
-    public void addValue(T val, long sampleCount, long errorSampleCount) {
+    public void addValue(T val, long sampleCount, long errorSampleCount,boolean calc_tps) {
         count += sampleCount;
         errorCount += errorSampleCount;
         double currentVal = val.doubleValue();
@@ -245,13 +246,13 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
             sumOfSquares += currentVal * currentVal;
         }
         updateValueCount(actualValue, sampleCount);
-        calculateDerivedValues(actualValue);
+        calculateDerivedValues(actualValue,calc_tps);
     }
 
-    private void calculateDerivedValues(T actualValue) {
-        String calc_tps = JMeterUtils.getProperty("baolu-aggregate-tps-report");
+    private void calculateDerivedValues(T actualValue ,boolean calc_tps) {
+//        String calc_tps = JMeterUtils.getProperty("baolu-aggregate-tps-report");
         mean = sum / count;
-        if ("CALC_TPS".equals(calc_tps)){
+        if (calc_tps){
             mean = sum / (count-errorCount);
         }
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
@@ -259,9 +260,13 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
             max = actualValue;
         }
         if (actualValue.compareTo(min) < 0){
-            if ("CALC_TPS".equals(calc_tps)){
+            if (calc_tps){
                 if (actualValue.intValue() != 0){
                     min = actualValue;
+                }else {
+                    if (min.equals(MAX_VALUE)){
+                        min = actualValue;
+                    }
                 }
             }else {
                 min = actualValue;
@@ -274,11 +279,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * Add a single value (normally elapsed time)
      *
      * @param val the value to add, which should correspond with a single sample
-     * @see #addValue(Number, long,long)
+     * @see #addValue(Number, long,long,boolean)
      */
     public void addValue(T val) {
-        System.out.println("==============================================");
-        addValue(val, 1L,0L);
+        addValue(val, 1L,0L,false);
     }
 
     private void updateValueCount(T actualValue, long sampleCount) {

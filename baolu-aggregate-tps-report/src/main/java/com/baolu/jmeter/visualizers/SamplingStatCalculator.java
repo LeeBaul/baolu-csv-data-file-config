@@ -207,14 +207,13 @@ public class SamplingStatCalculator {
         synchronized (calculator) {
             if (calcTps){//统计tps 不统计失败请求RT
                 if (res.isSuccessful()){
-                    calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount());
+                    calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount(),true);
                 }else {
                     //只要失败的时候才设置rt为0，来规避StatCalculator中min值为0的耗时计算
-                    JMeterUtils.setProperty("baolu-aggregate-tps-report","CALC_TPS");
-                    calculator.addValue(0L, res.getSampleCount(),res.getErrorCount());//
+                    calculator.addValue(0L, res.getSampleCount(),res.getErrorCount(),true);//
                 }
             }else {//统计吞吐量 也统计失败请求RT
-                calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount());
+                calculator.addValue(res.getTime(), res.getSampleCount(),res.getErrorCount(),false);
             }
             calculator.addBytes(res.getBytesAsLong());
             calculator.addSentBytes(res.getSentBytes());

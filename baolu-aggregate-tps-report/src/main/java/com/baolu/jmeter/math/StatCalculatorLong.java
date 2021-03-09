@@ -28,8 +28,8 @@ public class StatCalculatorLong extends StatCalculator<Long> {
      * @param val the aggregate value, normally the elapsed time
      * @param sampleCount the number of error samples contributing to the aggregate value
      */
-    public void addValue(long val, int sampleCount,int errorCount){
-        super.addValue(val, (long)sampleCount,errorCount);
+    public void addValue(long val, int sampleCount,int errorCount, boolean calc_tps){
+        super.addValue(val, (long)sampleCount,errorCount,calc_tps);
     }
 
     @Override
