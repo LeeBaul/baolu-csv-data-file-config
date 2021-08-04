@@ -104,6 +104,14 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         testElement.setProperty(CheckNetworkSampler.CONNECT_TIME_OUT, timeout.getText(),"");
     }
 
+    @Override
+    public void configure(TestElement element) {
+        super.configure(element);
+        host.setText(element.getPropertyAsString(CheckNetworkSampler.HOST));
+        port.setText(element.getPropertyAsString(CheckNetworkSampler.PORT));
+        timeout.setText(element.getPropertyAsString(CheckNetworkSampler.CONNECT_TIME_OUT));
+    }
+
     public void clearGui() {
         super.clearGui();
         initFields();
