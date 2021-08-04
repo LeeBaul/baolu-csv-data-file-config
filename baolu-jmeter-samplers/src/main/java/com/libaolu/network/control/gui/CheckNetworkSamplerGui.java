@@ -49,7 +49,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
 
     private JPanel createHostOption() {
         JLabel label = new JLabel("ServerName or IP");
-        host = new JTextField(14);
+        host = new JTextField(15);
         host.setMaximumSize(new Dimension(host.getPreferredSize()));
         label.setLabelFor(host);
         JPanel hostPanel = new JPanel(new FlowLayout());
@@ -60,7 +60,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
 
     private JPanel createPortOption() {
         JLabel label = new JLabel("Port Number");
-        port = new JTextField(10);
+        port = new JTextField(14);
         port.setMaximumSize(new Dimension(port.getPreferredSize()));
         label.setLabelFor(port);
         JPanel portPanel = new JPanel(new FlowLayout());
@@ -71,7 +71,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
 
     private JPanel createTimeoutOption() {
         JLabel label = new JLabel("Connect(milliseconds)");
-        timeout = new JTextField(8);
+        timeout = new JTextField(10);
         timeout.setMaximumSize(new Dimension(timeout.getPreferredSize()));
         label.setLabelFor(timeout);
         JPanel timeoutPanel = new JPanel(new FlowLayout());
