@@ -45,7 +45,11 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
         Socket socket = new Socket();
         boolean isConnected = false;
         try {
+            if (StringUtils.isEmpty(timeout)){
+                timeout = "5000";
+            }
             socket.connect(new InetSocketAddress(host, Integer.parseInt(port)), Integer.parseInt(timeout));
+            isConnected = socket.isConnected();
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -84,7 +88,7 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
 
     @Override
     public void testEnded() {
-        log.info("NMON命令执行结束");
+
     }
 
     @Override
