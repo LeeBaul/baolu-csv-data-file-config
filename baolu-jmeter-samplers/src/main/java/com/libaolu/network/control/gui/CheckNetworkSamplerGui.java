@@ -23,6 +23,10 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
      * port
      */
     private JTextField port;
+    /**
+     * timeout
+     */
+    private JTextField timeout;
 
     public CheckNetworkSamplerGui() {
         init();
@@ -37,6 +41,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
         optionsPanel.add(createHostOption());
         optionsPanel.add(createPortOption());
+        optionsPanel.add(createTimeoutOption());
     }
 
     private JPanel createHostOption() {
@@ -61,6 +66,17 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         return portPanel;
     }
 
+    private JPanel createTimeoutOption() {
+        JLabel label = new JLabel("Connect(milliseconds)");
+        timeout = new JTextField(8);
+        timeout.setMaximumSize(new Dimension(timeout.getPreferredSize()));
+        label.setLabelFor(timeout);
+        JPanel timeoutPanel = new JPanel(new FlowLayout());
+        timeoutPanel.add(label);
+        timeoutPanel.add(timeout);
+        return timeoutPanel;
+    }
+
     public String getStaticLabel(){
         return "Check Network Sampler";
     }
@@ -82,6 +98,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         super.configureTestElement(testElement);
         testElement.setProperty(CheckNetworkSampler.HOST, host.getText(),"");
         testElement.setProperty(CheckNetworkSampler.PORT, port.getText(),"");
+        testElement.setProperty(CheckNetworkSampler.CONNECT_TIME_OUT, timeout.getText(),"");
     }
 
     public void clearGui() {
@@ -91,5 +108,6 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
     private void initFields(){
         host.setText("${ip}");
         port.setText("${port}");
+        timeout.setText("5000");
     }
 }
