@@ -12,6 +12,7 @@
         <module>baolu-csv-data-file-config</module>
         <module>baolu-functions</module>
         <module>baolu-aggregate-tps-report</module>
+        <module>baolu-jmeter-samplers</module>
     </modules>
 
     <properties>
