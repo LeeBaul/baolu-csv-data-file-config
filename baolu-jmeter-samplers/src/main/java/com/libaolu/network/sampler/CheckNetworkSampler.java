@@ -32,7 +32,8 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
         boolean flag = telnet(getHost(),getPort(),getConnectTimeOut(),result);
         if (flag){
             result.setSuccessful(true);
-            result.setResponseCodeOK();
+            result.setResponseCode("200");
+            result.setResponseMessage("OK");
         }else {
             result.setSuccessful(false);
             result.setResponseCode("504");
@@ -57,11 +58,11 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
                 socket.close();
                 result.sampleEnd();
                 if (isConnected){
-                    result.setSampleLabel(host+" "+port +" established");
-                    log.info("{} {} established",host,port);
+                    result.setSampleLabel(host+" "+port +" connected");
+                    log.info("{} {} connected",host,port);
                 }else{
-                    result.setSampleLabel(host+" "+port +"connect timeout");
-                    log.error("{} {} connect timeout",host,port);
+                    result.setSampleLabel(host+" "+port +"connection timed out");
+                    log.error("{} {} connection timed out",host,port);
                 }
             } catch (IOException e) {
                e.printStackTrace();
