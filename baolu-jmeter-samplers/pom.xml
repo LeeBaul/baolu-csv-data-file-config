@@ -41,9 +41,9 @@
             <resource>
                 <directory>src/main/java</directory>
                 <!-- maven default生命周期，process-resources阶段执行maven-resources-plugin插件的resources目标处理主资源目下的资源文件时，只处理如下配置中包含的资源类型 -->
-           <!--     <includes>
-                    <include>**/*.properties</include>
-                </includes>-->
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
                 <!-- 是否对主资源目录开启资源过滤-->
                 <filtering>true</filtering>
             </resource>
@@ -67,7 +67,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -84,7 +84,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
