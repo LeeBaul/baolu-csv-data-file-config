@@ -61,7 +61,7 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
                     result.setSampleLabel(host+" "+port +" connected");
                     log.info("{} {} connected",host,port);
                 }else{
-                    result.setSampleLabel(host+" "+port +"connection timed out");
+                    result.setSampleLabel(host+" "+port +" connection timed out");
                     log.error("{} {} connection timed out",host,port);
                 }
             } catch (IOException e) {
