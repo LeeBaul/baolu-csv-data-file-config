@@ -30,6 +30,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
 
     public CheckNetworkSamplerGui() {
         init();
+        initFields();
     }
 
     private void init() {
@@ -42,6 +43,8 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         optionsPanel.add(createHostOption());
         optionsPanel.add(createPortOption());
         optionsPanel.add(createTimeoutOption());
+        mainPanel.add(optionsPanel);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createHostOption() {
