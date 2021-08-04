@@ -58,11 +58,11 @@ public class CheckNetworkSampler extends AbstractSampler implements TestStateLis
                 socket.close();
                 result.sampleEnd();
                 if (isConnected){
-                    result.setSampleLabel(host+" "+port +" connected");
-                    log.info("{} {} connected",host,port);
+                    result.setSampleLabel(JMeterUtils.getLocalHostIP()+" -> "+host+" "+port +" connected");
+                    log.info("{} -> {} {} connected",JMeterUtils.getLocalHostIP(),host,port);
                 }else{
-                    result.setSampleLabel(host+" "+port +" connection timed out");
-                    log.error("{} {} connection timed out",host,port);
+                    result.setSampleLabel(JMeterUtils.getLocalHostIP()+" -> "+host+" "+port +" connection timed out");
+                    log.error("{} -> {} {} connection timed out",JMeterUtils.getLocalHostIP(),host,port);
                 }
             } catch (IOException e) {
                e.printStackTrace();
