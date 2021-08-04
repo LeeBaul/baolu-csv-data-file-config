@@ -1,5 +1,6 @@
 package com.libaolu.network.control.gui;
 
+import com.libaolu.network.sampler.CheckNetworkSampler;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -60,18 +61,35 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
         return portPanel;
     }
 
+    public String getStaticLabel(){
+        return "Check Network Sampler";
+    }
+
     @Override
     public String getLabelResource() {
-        return null;
+        return super.getClass().getSimpleName();
     }
 
     @Override
     public TestElement createTestElement() {
-        return null;
+        CheckNetworkSampler cnSampler = new CheckNetworkSampler();
+        modifyTestElement(cnSampler);
+        return cnSampler;
     }
 
     @Override
     public void modifyTestElement(TestElement testElement) {
+        super.configureTestElement(testElement);
+        testElement.setProperty(CheckNetworkSampler.HOST, host.getText(),"");
+        testElement.setProperty(CheckNetworkSampler.PORT, port.getText(),"");
+    }
 
+    public void clearGui() {
+        super.clearGui();
+        initFields();
+    }
+    private void initFields(){
+        host.setText("${ip}");
+        port.setText("${port}");
     }
 }
