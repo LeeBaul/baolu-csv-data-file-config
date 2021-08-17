@@ -19,12 +19,12 @@ import static org.apache.jmeter.util.JMeterUtils.getResourceFileAsText;
  * @author libaolu
  * @date 2021/8/4 15:59
  */
-public class CheckNetworkSampler extends AbstractSampler implements TestStateListener {
+public class CheckNetworkPortSampler extends AbstractSampler implements TestStateListener {
 
-    private static final Logger log = LoggerFactory.getLogger(CheckNetworkSampler.class);
-    public static final String HOST = "CheckNetworkSampler.host";
-    public static final String PORT = "CheckNetworkSampler.port";
-    public static final String CONNECT_TIME_OUT = "CheckNetworkSampler.timeout";
+    private static final Logger log = LoggerFactory.getLogger(CheckNetworkPortSampler.class);
+    public static final String HOST = "CheckNetworkPortSampler.host";
+    public static final String PORT = "CheckNetworkPortSampler.port";
+    public static final String CONNECT_TIME_OUT = "CheckNetworkPortSampler.timeout";
     @Override
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();

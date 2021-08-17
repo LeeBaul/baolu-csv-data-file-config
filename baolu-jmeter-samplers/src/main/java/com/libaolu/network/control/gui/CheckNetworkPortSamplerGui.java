@@ -1,6 +1,6 @@
 package com.libaolu.network.control.gui;
 
-import com.libaolu.network.sampler.CheckNetworkSampler;
+import com.libaolu.network.sampler.CheckNetworkPortSampler;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -13,7 +13,7 @@ import java.awt.*;
  * @author libaolu
  * @date 2021/8/4 15:45
  */
-public class CheckNetworkSamplerGui extends AbstractSamplerGui {
+public class CheckNetworkPortSamplerGui extends AbstractSamplerGui {
 
     /**
      * serverName or IP
@@ -28,7 +28,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
      */
     private JTextField timeout;
 
-    public CheckNetworkSamplerGui() {
+    public CheckNetworkPortSamplerGui() {
         init();
         initFields();
     }
@@ -91,7 +91,7 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
 
     @Override
     public TestElement createTestElement() {
-        CheckNetworkSampler cnSampler = new CheckNetworkSampler();
+        CheckNetworkPortSampler cnSampler = new CheckNetworkPortSampler();
         modifyTestElement(cnSampler);
         return cnSampler;
     }
@@ -99,17 +99,17 @@ public class CheckNetworkSamplerGui extends AbstractSamplerGui {
     @Override
     public void modifyTestElement(TestElement testElement) {
         super.configureTestElement(testElement);
-        testElement.setProperty(CheckNetworkSampler.HOST, host.getText(),"");
-        testElement.setProperty(CheckNetworkSampler.PORT, port.getText(),"");
-        testElement.setProperty(CheckNetworkSampler.CONNECT_TIME_OUT, timeout.getText(),"");
+        testElement.setProperty(CheckNetworkPortSampler.HOST, host.getText(),"");
+        testElement.setProperty(CheckNetworkPortSampler.PORT, port.getText(),"");
+        testElement.setProperty(CheckNetworkPortSampler.CONNECT_TIME_OUT, timeout.getText(),"");
     }
 
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        host.setText(element.getPropertyAsString(CheckNetworkSampler.HOST));
-        port.setText(element.getPropertyAsString(CheckNetworkSampler.PORT));
-        timeout.setText(element.getPropertyAsString(CheckNetworkSampler.CONNECT_TIME_OUT));
+        host.setText(element.getPropertyAsString(CheckNetworkPortSampler.HOST));
+        port.setText(element.getPropertyAsString(CheckNetworkPortSampler.PORT));
+        timeout.setText(element.getPropertyAsString(CheckNetworkPortSampler.CONNECT_TIME_OUT));
     }
 
     public void clearGui() {
