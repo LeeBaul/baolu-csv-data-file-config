@@ -105,7 +105,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     private static final Properties STATUS_PROPS = new Properties();
 
-    private static final String PROTO_PREFIX = "org.apache.jmeter.protocol.tcp.sampler."; //$NON-NLS-1$
+    private static final String PROTO_PREFIX = "com.libaolu.tcp.sampler."; //$NON-NLS-1$
 
     private static final boolean HAVE_STATUS_PROPS;
 
@@ -317,7 +317,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         Class<?> c = null;
         try {
 //            c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
-            c = Class.forName("com.libaolu.tcp.sampler."+className);
+            c = Class.forName(PROTO_PREFIX + className);
         } catch (ClassNotFoundException e) {
             try {
                 c = Class.forName(PROTO_PREFIX + className, false, Thread.currentThread().getContextClassLoader());
