@@ -115,9 +115,6 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 
         add(mainPanel, BorderLayout.CENTER);
     }
-    static final int SHARE_ALL    = 0;
-    static final int SHARE_GROUP  = 1;
-    static final int SHARE_THREAD = 2;
 
     public static String[] getClientClassName() {
         return TCP_CLIENT_CLASSNAME;
