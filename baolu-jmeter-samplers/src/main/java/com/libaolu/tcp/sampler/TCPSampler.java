@@ -60,7 +60,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(
                     "org.apache.jmeter.config.gui.LoginConfigGui",
-                    "org.apache.jmeter.protocol.tcp.config.gui.TCPConfigGui",
+                    "com.libaolu.tcp.config.gui.TCPConfigGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
 
