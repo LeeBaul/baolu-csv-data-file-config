@@ -11,7 +11,7 @@
 
     <artifactId>baolu-jmeter-samplers</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <developers>
         <developer>
