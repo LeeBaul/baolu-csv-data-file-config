@@ -37,6 +37,13 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 
     private LoginConfigGui loginPanel;
     private TCPConfigGui tcpDefaultPanel;
+    private static final String[]  TCP_CLIENT_CLASSNAME = new String[3];
+
+    static {
+        TCP_CLIENT_CLASSNAME[0] = "TCPClientImpl"; //$NON-NLS-1$
+        TCP_CLIENT_CLASSNAME[1] = "BinaryTCPClientImpl"; //$NON-NLS-1$
+        TCP_CLIENT_CLASSNAME[2] = "LengthPrefixedBinaryTCPClientImpl"; //$NON-NLS-1$
+    }
 
     public TCPSamplerGui() {
         init();
@@ -107,6 +114,13 @@ public class TCPSamplerGui extends AbstractSamplerGui {
         mainPanel.add(loginPanel);
 
         add(mainPanel, BorderLayout.CENTER);
+    }
+    static final int SHARE_ALL    = 0;
+    static final int SHARE_GROUP  = 1;
+    static final int SHARE_THREAD = 2;
+
+    public static String[] getClientClassName() {
+        return TCP_CLIENT_CLASSNAME;
     }
 }
 
