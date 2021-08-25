@@ -28,6 +28,7 @@ public abstract class AbstractTCPClient implements TCPClient {
     private String charset;
     protected byte eolByte;
     protected boolean useEolByte = false;
+    protected int length = -1;
 
     /**
      * {@inheritDoc}
@@ -87,5 +88,16 @@ public abstract class AbstractTCPClient implements TCPClient {
     @SuppressWarnings("deprecation")
     public String read(InputStream is, SampleResult sampleResult) throws ReadException {
         return read(is);
+    }
+
+    /**
+     * @return the read response length
+     */
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 }
