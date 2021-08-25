@@ -30,7 +30,7 @@ import com.libaolu.tcp.sampler.TCPSampler;
  * limitations under the License.
  */
 
-@TestElementMetadata(labelResource = "tcp_sample_title")
+//@TestElementMetadata(labelResource = "tcp_sample_title")
 public class TCPSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;
@@ -81,8 +81,14 @@ public class TCPSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    public String getStaticLabel(){
+        return "BaoLu TCP Sampler";
+    }
+
+    @Override
     public String getLabelResource() {
-        return "tcp_sample_title"; // $NON-NLS-1$
+//        return "tcp_sample_title"; // $NON-NLS-1$
+        return super.getClass().getSimpleName();
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
