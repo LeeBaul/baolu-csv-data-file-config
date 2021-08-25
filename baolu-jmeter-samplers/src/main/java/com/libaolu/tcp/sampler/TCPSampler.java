@@ -316,7 +316,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     private Class<?> getClass(String className) {
         Class<?> c = null;
         try {
-            c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
+//            c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
+            c = Class.forName("com.libaolu.tcp.sampler."+className);
         } catch (ClassNotFoundException e) {
             try {
                 c = Class.forName(PROTO_PREFIX + className, false, Thread.currentThread().getContextClassLoader());
