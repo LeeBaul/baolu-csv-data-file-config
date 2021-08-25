@@ -20,12 +20,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import com.libaolu.tcp.control.gui.TCPSamplerGui;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.ServerPanel;
@@ -48,6 +45,8 @@ public class TCPConfigGui extends AbstractConfigGui {
     private ServerPanel serverPanel;
 
     private JLabeledTextField classname;
+
+    private JComboBox<String> tcpClientClassname = new JComboBox<>(TCPSamplerGui.getClientClassName());
 
     private JCheckBox reUseConnection;
 
@@ -81,7 +80,8 @@ public class TCPConfigGui extends AbstractConfigGui {
     public void configure(TestElement element) {
         super.configure(element);
         // N.B. this will be a config element, so we cannot use the getXXX() methods
-        classname.setText(element.getPropertyAsString(TCPSampler.CLASSNAME));
+//        classname.setText(element.getPropertyAsString(TCPSampler.CLASSNAME));
+        tcpClientClassname.setSelectedItem(element.getPropertyAsString(TCPSampler.CLASSNAME));
         serverPanel.setServer(element.getPropertyAsString(TCPSampler.SERVER));
         // Default to original behaviour, i.e. re-use connection
         reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION, TCPSampler.RE_USE_CONNECTION_DEFAULT));
@@ -112,7 +112,8 @@ public class TCPConfigGui extends AbstractConfigGui {
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         // N.B. this will be a config element, so we cannot use the setXXX() methods
-        element.setProperty(TCPSampler.CLASSNAME, classname.getText(), "");
+//        element.setProperty(TCPSampler.CLASSNAME, classname.getText(), "");
+        element.setProperty(TCPSampler.CLASSNAME, tcpClientClassname.getSelectedItem().toString(), "TCPClientImpl");
         element.setProperty(TCPSampler.SERVER, serverPanel.getServer());
         element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
         element.setProperty(TCPSampler.PORT, serverPanel.getPort());
@@ -133,7 +134,8 @@ public class TCPConfigGui extends AbstractConfigGui {
         super.clearGui();
 
         serverPanel.clear();
-        classname.setText(""); //$NON-NLS-1$
+//        classname.setText(""); //$NON-NLS-1$
+        tcpClientClassname.setSelectedItem("TCPClientImpl"); //$NON-NLS-1$
         requestData.setInitialText(""); //$NON-NLS-1$
         reUseConnection.setSelected(true);
         setNoDelay.setSelected(false); // TODO should this be indeterminate?
@@ -226,6 +228,16 @@ public class TCPConfigGui extends AbstractConfigGui {
         return reqDataPanel;
     }
 
+    protected final JPanel getTcpClientClassPanel(){
+        JPanel implPanel = new HorizontalPanel();
+        implPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_server_client"))); // $NON-NLS-1$
+        implPanel.add(new JLabel(JMeterUtils.getResString("tcp_classname"))); // $NON-NLS-1$
+//        tcpClientClassname.addItem("");// $NON-NLS-1$
+        implPanel.add(tcpClientClassname);
+        return implPanel;
+    }
+
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));
 
@@ -237,8 +249,9 @@ public class TCPConfigGui extends AbstractConfigGui {
         }
 
         VerticalPanel mainPanel = new VerticalPanel();
-        classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname")); // $NON-NLS-1$
-        mainPanel.add(classname);
+//        classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname")); // $NON-NLS-1$
+//        mainPanel.add(classname);
+        mainPanel.add(getTcpClientClassPanel());
         mainPanel.add(serverPanel);
 
         HorizontalPanel optionsPanel = new HorizontalPanel();
@@ -253,5 +266,6 @@ public class TCPConfigGui extends AbstractConfigGui {
 
         add(mainPanel, BorderLayout.CENTER);
     }
+
 }
 
