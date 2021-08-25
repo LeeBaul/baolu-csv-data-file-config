@@ -58,6 +58,8 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JTextField eolByte;
 
+    private JTextField respLength;
+
     private JSyntaxTextArea requestData;
 
     private boolean displayName = true;
@@ -94,6 +96,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         closeConnection.setTristateFromProperty(element, TCPSampler.CLOSE_CONNECTION);
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));
         eolByte.setText(element.getPropertyAsString(TCPSampler.EOL_BYTE));
+        respLength.setText(element.getPropertyAsString(TCPSampler.RESP_LENGTH, ""));
     }
 
     @Override
@@ -124,6 +127,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         closeConnection.setPropertyFromTristate(element, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
+        element.setProperty(TCPSampler.RESP_LENGTH, respLength.getText(), "");
     }
 
     /**
@@ -214,6 +218,19 @@ public class TCPConfigGui extends AbstractConfigGui {
         return eolBytePanel;
     }
 
+    private JPanel createLengthPanel() {
+        JLabel label = new JLabel("resp_length"); //$NON-NLS-1$
+
+        respLength = new JTextField(5);
+        respLength.setMaximumSize(new Dimension(respLength.getPreferredSize()));
+        label.setLabelFor(respLength);
+
+        JPanel eolBytePanel = new JPanel(new FlowLayout());
+        eolBytePanel.add(label);
+        eolBytePanel.add(respLength);
+        return eolBytePanel;
+    }
+
     private JPanel createRequestPanel() {
         JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data")); // $NON-NLS-1$
         requestData = JSyntaxTextArea.getInstance(15, 80);
@@ -261,6 +278,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         optionsPanel.add(createNoDelayPanel());
         optionsPanel.add(createSoLingerOption());
         optionsPanel.add(createEolBytePanel());
+        optionsPanel.add(createLengthPanel());
         mainPanel.add(optionsPanel);
         mainPanel.add(createRequestPanel());
 
