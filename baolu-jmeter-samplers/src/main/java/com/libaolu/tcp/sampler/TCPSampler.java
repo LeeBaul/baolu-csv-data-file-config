@@ -90,6 +90,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     public static final String EOL_BYTE = "TCPSampler.EolByte"; //$NON-NLS-1$
 
+    public static final String RESP_LENGTH = "TCPSampler.resLength"; //$NON-NLS-1$
+
     private static final String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 
     private static final String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
@@ -337,6 +339,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             if (getPropertyAsString(EOL_BYTE, "").length()>0){
                 tcpClient.setEolByte(getEolByte());
                 log.info("Using eolByte={}", getEolByte());
+            }else if (getPropertyAsString(RESP_LENGTH, "").trim().length()>0){
+                tcpClient.setLength(Integer.parseInt(getPropertyAsString(RESP_LENGTH, "").trim()));
+                log.info("Using read response length={}", getPropertyAsString(RESP_LENGTH, ""));
             }
 
             if (log.isDebugEnabled()) {
