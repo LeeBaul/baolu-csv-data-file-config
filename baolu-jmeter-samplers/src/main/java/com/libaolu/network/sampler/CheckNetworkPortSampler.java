@@ -73,7 +73,7 @@ public class CheckNetworkPortSampler extends AbstractSampler implements TestStat
         return isConnected;
     }
 
-        @Override
+    @Override
     public void testStarted() {
         String pluginsShow = JMeterUtils.getProperty("baolu-jmeter-plugins");
         if (StringUtils.isEmpty(pluginsShow)){
