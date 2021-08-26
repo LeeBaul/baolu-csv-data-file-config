@@ -81,7 +81,7 @@ public class CheckNetworkPortSamplerGui extends AbstractSamplerGui {
     }
 
     public String getStaticLabel(){
-        return "Check NetworkPort Sampler";
+        return "BaoLu NetworkPort Sampler";
     }
 
     @Override
