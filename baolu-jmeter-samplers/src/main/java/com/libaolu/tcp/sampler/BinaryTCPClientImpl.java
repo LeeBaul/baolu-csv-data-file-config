@@ -144,7 +144,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                     }
                     y+=x;
                     w.write(buffer, 0, x);
-                    if (x >= length) {
+                    if (y >= length) {
                         break;
                     }
                 }
