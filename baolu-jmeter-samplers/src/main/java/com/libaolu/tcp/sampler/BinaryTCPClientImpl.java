@@ -17,10 +17,7 @@
 
 package com.libaolu.tcp.sampler;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.SocketTimeoutException;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -120,9 +117,11 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
     @Override
     public String read(InputStream is, SampleResult sampleResult) throws ReadException {
         ByteArrayOutputStream w = new ByteArrayOutputStream();
+        BufferedInputStream bis = null;
         try {
             byte[] buffer = new byte[4096];
             int x = 0;
+            int y = 0;//已读取字节长度
             boolean first = true;
             if (getLength() == -1) {
                 while ((x = is.read(buffer)) > -1) {
@@ -136,10 +135,18 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                     }
                 }
             } else {
-                buffer = new byte[this.length];
-                if ((x = is.read(buffer, 0, this.length)) > -1) {
-                    sampleResult.latencyEnd();
+                buffer = new byte[length];
+                bis = new BufferedInputStream(is);
+                while ((x = bis.read(buffer, 0, length)) > -1) {
+                    if (first) {
+                        sampleResult.latencyEnd();
+                        first = false;
+                    }
+                    y+=x;
                     w.write(buffer, 0, x);
+                    if (x >= length) {
+                        break;
+                    }
                 }
             }
         } catch (SocketTimeoutException e) {
