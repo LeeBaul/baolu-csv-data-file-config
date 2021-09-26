@@ -19,8 +19,14 @@ public class JMeterAgent {
      */
     public static void premain(String agentArgs, Instrumentation inst){
         System.out.println("premain");
-        System.out.println(agentArgs);
-        customLogic(inst);
+        inst.addTransformer(new JMeterTransformer(), true);
+        try {
+            //重定义类并载入新的字节码
+            inst.retransformClasses(JMeter.class);
+            System.out.println("JMeterAgent Load Done.");
+        } catch (Exception e) {
+            System.out.println("JMeterAgent load failed!");
+        }
     }
 
     /**
@@ -40,19 +46,4 @@ public class JMeterAgent {
         }
     }
 
-    /**
-     * 打印所有已加载的类名称
-     * 修改字节码
-     * @param inst
-     */
-    private static void customLogic(Instrumentation inst){
-        inst.addTransformer(new JMeterTransformer(), true);
-        try {
-            //重定义类并载入新的字节码
-            inst.retransformClasses(JMeter.class);
-            System.out.println("JMeterAgent Load Done.");
-        } catch (Exception e) {
-            System.out.println("JMeterAgent load failed!");
-        }
-    }
 }
