@@ -13,6 +13,7 @@
         <module>baolu-functions</module>
         <module>baolu-aggregate-tps-report</module>
         <module>baolu-jmeter-samplers</module>
+        <module>baolu-jmeter-instrument-agent</module>
     </modules>
 
     <properties>
