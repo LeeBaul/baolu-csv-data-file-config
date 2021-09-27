@@ -3,11 +3,10 @@ package com.libaolu.jmeter.instrument.agent;
 import javassist.*;
 import org.apache.jmeter.JMeter;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
-import java.security.ProtectionDomain;
 
 /**
  * <p/>
@@ -18,31 +17,29 @@ import java.security.ProtectionDomain;
  **/
 public class JMeterAgent {
     static String targetClass = "org.apache.jmeter.NewDriver";
+    static String targetClass1 = "org.apache.jmeter.JMeter";
     /**
      * jvm 参数形式启动，运行此方法
      * @param agentArgs
      * @param inst
      */
     public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.println("==================premain====================");
-        inst.addTransformer(new ClassFileTransformer() {
-            @Override
-            public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-                byte[] result = null;
-                if (className != null && className.replace("/", ".").equals(targetClass)) {
-                    ClassPool pool = new ClassPool();
-                    pool.insertClassPath(new LoaderClassPath(loader));
-                    try {
-                        CtClass ctClass = pool.get(targetClass);
-                        CtMethod ctMethod = ctClass.getDeclaredMethod("main");
-                        ctMethod.insertAfter("System.out.println(\"my name is libaolu\");");
-                        result = ctClass.toBytecode();
-                    } catch (NotFoundException | CannotCompileException | IOException e) {
-                        e.printStackTrace();
-                    }
+        inst.addTransformer((loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> {
+            byte[] result = null;
+//            save(className);
+            if (className != null && className.replace("/", ".").equals(targetClass1)) {
+                ClassPool pool = new ClassPool();
+                pool.insertClassPath(new LoaderClassPath(loader));
+                try {
+                    CtClass ctClass = pool.get(targetClass1);
+                    CtMethod ctMethod = ctClass.getDeclaredMethod("start");//main 、 start 、pConvertSubTree
+                    ctMethod.insertAfter("System.out.println(\"my name is libaolu\");");
+                    result = ctClass.toBytecode();
+                } catch (NotFoundException | CannotCompileException | IOException e) {
+                    e.printStackTrace();
                 }
-                return result;
             }
+            return result;
         });
     }
 
@@ -63,8 +60,25 @@ public class JMeterAgent {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(2222);
+    public static void save(String classname) {
+        FileWriter fstream = null;
+        try {
+            fstream = new FileWriter("C://classname.txt",true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter out =new BufferedWriter(fstream);
+        try {
+            out.write(classname+"\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            out.close();
+            fstream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
