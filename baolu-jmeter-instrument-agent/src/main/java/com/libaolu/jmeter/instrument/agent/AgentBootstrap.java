@@ -1,10 +1,8 @@
 package com.libaolu.jmeter.instrument.agent;
 
+import com.libaolu.jmeter.instrument.agent.utils.ScriptUtil;
 import javassist.*;
 import org.apache.jmeter.JMeter;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
@@ -15,7 +13,7 @@ import java.lang.instrument.Instrumentation;
  * @version 1.0
  * @dateTime 2021/9/26 16:48
  **/
-public class JMeterAgent {
+public class AgentBootstrap {
     static String targetClass0 = "org.apache.jmeter.NewDriver";
     static String targetClass1 = "org.apache.jmeter.JMeter";
     /**
@@ -26,7 +24,7 @@ public class JMeterAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
         inst.addTransformer((loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> {
             byte[] result = null;
-//            save(className);
+//            ScriptUtil.writeStrTofile(className);
             if (className != null && className.replace("/", ".").equals(targetClass1)) {
                 ClassPool pool = new ClassPool();
                 pool.insertClassPath(new LoaderClassPath(loader));
@@ -35,6 +33,7 @@ public class JMeterAgent {
                     CtMethod ctMethod = ctClass.getDeclaredMethod("pConvertSubTree");//main 、 start 、pConvertSubTree
                     ctMethod.insertAt(1173,"if (\"javaReq_0001\".equals(item.getName())){ " +
                             " item.setEnabled(false); }");
+                    CtMethod enhancedMethod = CtNewMethod.copy(ctMethod, "pConvertSubTree", ctClass, null);
                     result = ctClass.toBytecode();
                 } catch (NotFoundException | CannotCompileException | IOException e) {
                     e.printStackTrace();
@@ -42,27 +41,6 @@ public class JMeterAgent {
             }
             return result;
         });
-    }
-
-    public static void save(String classname) {
-        FileWriter fstream = null;
-        try {
-            fstream = new FileWriter("C://classname.txt",true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedWriter out =new BufferedWriter(fstream);
-        try {
-            out.write(classname+"\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            out.close();
-            fstream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
