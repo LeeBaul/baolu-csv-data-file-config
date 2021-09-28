@@ -64,8 +64,8 @@
                         <manifestEntries>
                             <Manifest-Version>1.0.0</Manifest-Version>
                             <Created-By>libaolu</Created-By>
-                            <Agent-Class>com.libaolu.jmeter.instrument.agent.JMeterAgent</Agent-Class>
-                            <Premain-Class>com.libaolu.jmeter.instrument.agent.JMeterAgent</Premain-Class>
+                            <Agent-Class>com.libaolu.jmeter.instrument.agent.AgentBootstrap</Agent-Class>
+                            <Premain-Class>com.libaolu.jmeter.instrument.agent.AgentBootstrap</Premain-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
