@@ -16,7 +16,7 @@ import java.lang.instrument.Instrumentation;
  * @dateTime 2021/9/26 16:48
  **/
 public class JMeterAgent {
-    static String targetClass = "org.apache.jmeter.NewDriver";
+    static String targetClass0 = "org.apache.jmeter.NewDriver";
     static String targetClass1 = "org.apache.jmeter.JMeter";
     /**
      * jvm 参数形式启动，运行此方法
