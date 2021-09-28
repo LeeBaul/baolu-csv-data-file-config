@@ -13,16 +13,16 @@ import java.io.IOException;
  **/
 public class ScriptUtil {
 
-    public static void writeStrTofile(String classname) {
+    public static void writeStrTofile(String str) {
         FileWriter fstream = null;
         try {
-            fstream = new FileWriter("C://classname.txt",true);
+            fstream = new FileWriter("C://str.txt",true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         BufferedWriter out =new BufferedWriter(fstream);
         try {
-            out.write(classname+"\n");
+            out.write(str+"\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
