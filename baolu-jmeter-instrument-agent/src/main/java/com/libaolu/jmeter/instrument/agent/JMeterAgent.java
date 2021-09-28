@@ -32,8 +32,9 @@ public class JMeterAgent {
                 pool.insertClassPath(new LoaderClassPath(loader));
                 try {
                     CtClass ctClass = pool.get(targetClass1);
-                    CtMethod ctMethod = ctClass.getDeclaredMethod("start");//main 、 start 、pConvertSubTree
-                    ctMethod.insertAfter("System.out.println(\"my name is libaolu\");");
+                    CtMethod ctMethod = ctClass.getDeclaredMethod("pConvertSubTree");//main 、 start 、pConvertSubTree
+                    ctMethod.insertAt(1173,"if (\"javaReq_0001\".equals(item.getName())){ " +
+                            " item.setEnabled(false); }");
                     result = ctClass.toBytecode();
                 } catch (NotFoundException | CannotCompileException | IOException e) {
                     e.printStackTrace();
@@ -41,23 +42,6 @@ public class JMeterAgent {
             }
             return result;
         });
-    }
-
-    /**
-     * 动态 attach 方式启动，运行此方法
-     * @param agentArgs
-     * @param inst
-     */
-    public static void agentmain(String agentArgs, Instrumentation inst){
-        System.out.println("agentmain");
-        inst.addTransformer(new JMeterTransformer(), true);
-        try {
-            //重定义类并载入新的字节码
-            inst.retransformClasses(JMeter.class);
-            System.out.println("JMeterAgent Load Done.");
-        } catch (Exception e) {
-            System.out.println("JMeterAgent load failed!");
-        }
     }
 
     public static void save(String classname) {
