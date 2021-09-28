@@ -14,8 +14,8 @@ import java.lang.instrument.Instrumentation;
  * @dateTime 2021/9/26 16:48
  **/
 public class AgentBootstrap {
-    static String targetClass0 = "org.apache.jmeter.NewDriver";
-    static String targetClass1 = "org.apache.jmeter.JMeter";
+    private static final String TARGET_CLASS0 = "org.apache.jmeter.NewDriver";
+    private static final String TARGET_CLASS1 = "org.apache.jmeter.JMeter";
     /**
      * jvm 参数形式启动，运行此方法
      * @param agentArgs
@@ -25,11 +25,11 @@ public class AgentBootstrap {
         inst.addTransformer((loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> {
             byte[] result = null;
 //            ScriptUtil.writeStrTofile(className);
-            if (className != null && className.replace("/", ".").equals(targetClass1)) {
+            if (className != null && className.replace("/", ".").equals(TARGET_CLASS1)) {
                 ClassPool pool = new ClassPool();
                 pool.insertClassPath(new LoaderClassPath(loader));
                 try {
-                    CtClass ctClass = pool.get(targetClass1);
+                    CtClass ctClass = pool.get(TARGET_CLASS1);
                     CtMethod ctMethod = ctClass.getDeclaredMethod("pConvertSubTree");//main 、 start 、pConvertSubTree
                     ctMethod.insertAt(1173,"if (\"javaReq_0001\".equals(item.getName())){ " +
                             " item.setEnabled(false); }");
