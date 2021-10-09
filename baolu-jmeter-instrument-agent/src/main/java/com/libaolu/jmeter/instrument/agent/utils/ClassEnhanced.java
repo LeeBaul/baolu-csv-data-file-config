@@ -13,10 +13,8 @@ import java.io.IOException;
  **/
 public class ClassEnhanced {
     public static void enhancedMethod(CtClass ctClass,String methodName) throws NotFoundException, CannotCompileException {
-        System.out.println("methodName is "+ methodName);
         CtMethod ctMethod = ctClass.getDeclaredMethod("pConvertSubTree");//main 、 start 、pConvertSubTree
         String oriMethod = methodName + "$temp";
-        System.out.println("oriMethod is "+ oriMethod);
         ctMethod.setName(oriMethod);//设置源方法名
         CtMethod enhancedMethod = CtNewMethod.copy(ctMethod, methodName, ctClass, null);
         //对复制方法注入新方法体
