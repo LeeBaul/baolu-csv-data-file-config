@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <jmeter.version>5.4</jmeter.version>
+        <jmeter.version>5.4.3</jmeter.version>
     </properties>
 
 </project>
