@@ -35,7 +35,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     private static final Logger log = LoggerFactory.getLogger(BaoluCSVDataSet.class);
 
-    private static final String EOFVALUE = // value to return at EOF
+    private static final String EOF_VALUE = // value to return at EOF
             JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private transient String filename;
@@ -182,7 +182,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
                         +getName()+" configured with stopThread:"+ getStopThread()+", recycle:" + getRecycle());
             }
             for (String var :vars) {
-                threadVars.put(var, EOFVALUE);
+                threadVars.put(var, EOF_VALUE);
             }
         }
     }
