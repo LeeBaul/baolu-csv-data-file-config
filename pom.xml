@@ -2,25 +2,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.libaolu.jmeter</groupId>
-    <artifactId>baolu-jmeter-plugins</artifactId>
-    <packaging>pom</packaging>
-    <version>1.1.1-SNAPSHOT</version>
-    <modules>
-        <module>baolu-csv-data-file-config</module>
-        <module>baolu-functions</module>
-        <module>baolu-aggregate-tps-report</module>
-        <module>baolu-jmeter-samplers</module>
-        <module>baolu-jmeter-instrument-agent</module>
-    </modules>
-
-    <properties>
+    <artifactId>baolu-csv-data-file-config</artifactId>
+	<groupId>com.libaolu.jmeter</groupId>
+    <packaging>jar</packaging>
+    <version>1.2.0</version>
+	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <jmeter.version>5.4.3</jmeter.version>
     </properties>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <!-- maven default生命周期，process-resources阶段执行maven-resources-plugin插件的resources目标处理主资源目下的资源文件时，只处理如下配置中包含的资源类型 -->
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <!-- 是否对主资源目录开启资源过滤-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.txt</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <!-- 指定项目编译时的java版本和编码方式 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <target>${java.version}</target>
+                    <source>${java.version}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.jmeter</groupId>
+            <artifactId>ApacheJMeter_core</artifactId>
+            <version>${jmeter.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>
