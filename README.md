@@ -10,6 +10,8 @@ This plug-in is developed based on JMeter's csv-data-file-config
 
 You can download the latest version of baolu-csv-data-file-config from [here](https://gitee.com/LeeBaul/baolu-csv-data-file-config/releases)
 
+or get in Download directory.
+
 #### Build source code
 You can clone the project and run 'mvn install'. 
 
