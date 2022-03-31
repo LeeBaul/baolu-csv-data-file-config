@@ -5,8 +5,10 @@ This plug-in supports automatic or manual csv data allocation for each thread.
 
 It has a similar LoadRunner capability parameterization.
 
+If your request involves database update operation, using this plug-in in the test script can avoid lock waiting and improve the reliability of test results.
+
 #### Installation
-This plug-in is developed based on JMeter's csv-data-file-config
+This plug-in is developed based on JMeter's csv-data-file-config.
 
 You can download the latest version of baolu-csv-data-file-config from [here](https://gitee.com/LeeBaul/baolu-csv-data-file-config/releases)
 
