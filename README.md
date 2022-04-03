@@ -54,7 +54,7 @@ we can see every thread automatically allocates two pieces of data.
 
 threadNum 1 will only read the first two data,threadNum 2 will only read the last two data.
 
-4. You can also try manual csv data allocation for each thread now.
+4. we try manual csv data allocation for each thread now.
 
 tips：
 
@@ -62,6 +62,14 @@ Allocate data for each thread set true && Automatically allocate block size set 
 
 Set block size for each threads int value.
 
+![](src/main/resources/images/imge06.png)
 
+the result as follows.
 
+![](src/main/resources/images/imge07.png)
 
+we can see every thread allocates one pieces of data. 
+
+If the tested request involves database update operations, such as transfer transactions, we can allocate cardNo data to each thread,
+
+so as to avoid data lock waiting. It improves the reliability of test results.
