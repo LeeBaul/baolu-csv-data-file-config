@@ -2,10 +2,13 @@ package com.baolu.jmeter.config;
 
 import com.baolu.jmeter.services.FileServer;
 import com.baolu.jmeter.utils.BaoluUtils;
+import net.sf.saxon.trans.SymbolicName;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -17,6 +20,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -193,6 +197,15 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
             log.info(System.getProperty("line.separator")+""+getResourceFileAsText("banner/banner.txt"));
             JMeterUtils.setProperty("baolu-jmeter-plugins","show");
         }
+        if (JMeter.isNonGUI()){
+            String baseDir = org.apache.jmeter.services.FileServer.getFileServer().getBaseDir();
+            FileServer.getFileServer().setBasedir(baseDir);
+        }else {
+            String testPlanFile  = GuiPackage.getInstance().getTestPlanFile();
+//            File file = new File(testPlanFile);
+//            FileServer.getFileServer().setBaseForScript(file);
+            FileServer.getFileServer().setBasedir(testPlanFile);
+        }
     }
 
     public void testStarted(String s) {
@@ -201,6 +214,11 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void testEnded() {
         curThreadsCsvFileData.clear();
+        try {
+            FileServer.getFileServer().closeFiles();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void testEnded(String s) {
