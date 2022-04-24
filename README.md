@@ -73,3 +73,7 @@ we can see every thread allocates one pieces of data.
 If the tested request involves database update operations, such as transfer transactions, we can allocate cardNo data to each thread,
 
 so as to avoid data lock waiting. It improves the reliability of test results.
+
+My WeChat official account:
+
+![](src/main/resources/images/imge08.jpg)
