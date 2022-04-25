@@ -67,31 +67,31 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     private boolean ignoreFirstLine = false;
 
     /**
-     * 是否为每个线程分配数据
+     * Flag assigns data to each thread
      */
     private boolean allocateData = false;
     /**
-     * 自动分配
+     * Automatic allocation
      */
     private boolean automaticallyAllocate = true;
 
     /**
-     * 自定义每个线程分得的数据块大小
+     * Data block size allocated to each thread
      */
     private int blockSize = 0;
 
     /**
-     * 当前位置
+     * current location
      */
     private static final ThreadLocal<Integer>  curParaPos =  new ThreadLocal<>();
 
     /**
-     * 线程数据
+     * Thread data
      */
     private final Map<Integer,String[]> curThreadsCsvFileData = new ConcurrentHashMap<>();
 
     /**
-     * 固定结尾
+     * End of file flag
      */
     private static final String [] PARAMS_EOF = {"<EOF>"};
 
