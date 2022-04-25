@@ -613,7 +613,7 @@ public class FileServer {
      */
     public int getBlockSize(JMeterContext context, int fileLines){
         int blockSize = 0;
-        int threadTotal = JMeterContextService.getContext().getThreadGroup().getNumThreads();
+        int threadTotal = JMeterContextService.getTotalThreads();
         if (fileLines > 0) {
             blockSize = fileLines / threadTotal;
             if (blockSize < 1) {
