@@ -8,7 +8,7 @@
     <artifactId>baolu-csv-data-file-config</artifactId>
 	<groupId>com.libaolu.jmeter</groupId>
     <packaging>jar</packaging>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
 	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
