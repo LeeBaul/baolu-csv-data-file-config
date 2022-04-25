@@ -550,11 +550,11 @@ public class FileServer {
 
     /**
      * create by libaolu
-     * @param fileName 文件
-     * @param recycle 是否循环读取数据
-     * @param firstLineIsNames 第一行是否为变量
-     * @param startNumber 开始行号
-     * @param blockSize 块大小
+     * @param fileName parameter file
+     * @param recycle recycle
+     * @param firstLineIsNames ignore first line flag
+     * @param startNumber start number
+     * @param blockSize block size for each threads
      * @return
      */
     public synchronized String[] readLineBlock(String fileName, boolean recycle, boolean firstLineIsNames, int startNumber, int blockSize){
@@ -594,9 +594,9 @@ public class FileServer {
 
     /**
      * create by libaolu
-     * @param context
-     * @param blockSize
-     * @return
+     * @param context JMeterContext
+     * @param blockSize block size for each threads
+     * @return start line for each threads
      */
     public int getStartLine(JMeterContext context, int blockSize){
         int curThreadNo = context.getThread().getThreadNum();
@@ -605,9 +605,9 @@ public class FileServer {
 
     /**
      * create by libaolu
-     * @param context 上下文
-     * @param fileLines 文件总行数
-     * @return 每个线程所分行数大小
+     * @param context JMeterContext
+     * @param fileLines parameter file total line
+     * @return block size for each threads
      */
     public int getBlockSize(JMeterContext context, int fileLines){
         int blockSize = 0;
@@ -615,18 +615,18 @@ public class FileServer {
         if (fileLines > 0) {
             blockSize = fileLines / threadTotal;
             if (blockSize < 1) {
-                log.error("params size < threads count; params size:" + fileLines + " , threads count :" + threadTotal);
+                log.error("params size < threads count; params size {},threads count {}",fileLines,threadTotal);
             }
-            log.info("the number of rows allocated per thread is : " + blockSize);
+            log.info("the number of rows allocated per thread is {} ",blockSize);
         }
         return blockSize;
     }
 
     /**
      * create by libaolu
-     * @param fileName 文件
-     * @param ignoreFirstLine 是否忽略文件首行
-     * @return 文件总行数
+     * @param fileName parameter file
+     * @param ignoreFirstLine ignore first line flag
+     * @return parameter file total line
      */
     public int getCsvFileRows(String fileName, boolean ignoreFirstLine){
         int rows = 0;
