@@ -276,13 +276,13 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     /**
      * create by libaolu
-     * @param recycle 默认true
-     * @param ignoreFirstLine 默认false
+     * @param recycle default true
+     * @param ignoreFirstLine default false
      * @return
      */
     public void getThreadsBlockData(FileServer server,boolean recycle, boolean ignoreFirstLine){
         JMeterContext context = getThreadContext();
-        String fileName = getFilename();
+        String fileName = getFilename().trim();
         int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
         int totalLines = server.getCsvFileRows(fileName, ignoreFirstLine);
         int blockSize;
