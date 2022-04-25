@@ -617,7 +617,6 @@ public class FileServer {
             if (blockSize < 1) {
                 log.error("params size < threads count; params size {},threads count {}",fileLines,threadTotal);
             }
-            log.info("the number of rows allocated per thread is {} ",blockSize);
         }
         return blockSize;
     }
