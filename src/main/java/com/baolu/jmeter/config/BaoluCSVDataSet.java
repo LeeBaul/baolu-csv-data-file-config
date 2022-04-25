@@ -301,7 +301,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
         }
 
-        int startLine = server.getstartLine(context, blockSize);
+        int startLine = server.getStartLine(context, blockSize);
         if (curThreadsCsvFileData.get(threadNum) == null) {//判断当前线程分配的文件是否已经缓存
             String[] blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
             curThreadsCsvFileData.put(threadNum,blockPara);

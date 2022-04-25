@@ -550,15 +550,15 @@ public class FileServer {
 
     /**
      * create by libaolu
-     * @param filePath 文件路径
+     * @param fileName 文件
      * @param recycle 是否循环读取数据
      * @param firstLineIsNames 第一行是否为变量
      * @param startNumber 开始行号
      * @param blockSize 块大小
      * @return
      */
-    public synchronized String[] readLineBlock(String filePath, boolean recycle, boolean firstLineIsNames, int startNumber, int blockSize){
-        File file = new File(filePath);
+    public synchronized String[] readLineBlock(String fileName, boolean recycle, boolean firstLineIsNames, int startNumber, int blockSize){
+        File file = resolveFileFromPath(fileName);
         FileReader in = null;
         String[] paramArr = null;
         try {
@@ -586,9 +586,7 @@ public class FileServer {
                 reader.close();
                 in.close();
             }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return paramArr;
@@ -600,7 +598,7 @@ public class FileServer {
      * @param blockSize
      * @return
      */
-    public int getstartLine(JMeterContext context, int blockSize){
+    public int getStartLine(JMeterContext context, int blockSize){
         int curThreadNo = context.getThread().getThreadNum();
         return (curThreadNo * blockSize);
     }
@@ -626,13 +624,13 @@ public class FileServer {
 
     /**
      * create by libaolu
-     * @param filePath 文件
+     * @param fileName 文件
      * @param ignoreFirstLine 是否忽略文件首行
      * @return 文件总行数
      */
-    public int getCsvFileRows(String filePath, boolean ignoreFirstLine){
-        File file = new File(filePath);
+    public int getCsvFileRows(String fileName, boolean ignoreFirstLine){
         int rows = 0;
+        File file = resolveFileFromPath(fileName);
         try {
             FileReader in = new FileReader(file);
             LineNumberReader reader = new LineNumberReader(in);
@@ -644,9 +642,7 @@ public class FileServer {
             }
             reader.close();
             in.close();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return rows;
