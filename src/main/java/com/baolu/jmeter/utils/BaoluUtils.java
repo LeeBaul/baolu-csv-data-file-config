@@ -19,7 +19,7 @@ public class BaoluUtils {
 
     public static int getThreadIndex(String JMeterThreadName){
         String index = JMeterThreadName.substring(JMeterThreadName.lastIndexOf('-') + 1);
-        return Integer.valueOf(index);
+        return Integer.parseInt(index);
     }
 
     public static String getResourceFileAsText(String name) {
