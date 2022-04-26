@@ -41,7 +41,7 @@
           <intProp name="blockSize">0</intProp>
         </com.baolu.jmeter.config.BaoluCSVDataSet>
         <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="${__threadNum}-${number}" enabled="true">
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java Request" enabled="true">
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
@@ -56,7 +56,7 @@
               </elementProp>
               <elementProp name="Label" elementType="Argument">
                 <stringProp name="Argument.name">Label</stringProp>
-                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.value">${__threadNum}-${number}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="ResponseCode" elementType="Argument">
