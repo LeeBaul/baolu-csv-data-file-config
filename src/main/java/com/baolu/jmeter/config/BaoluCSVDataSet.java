@@ -193,18 +193,19 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void testStarted() {
         String pluginsShow = JMeterUtils.getProperty("baolu-jmeter-plugins");
+        FileServer server = FileServer.getFileServer();
         if (StringUtils.isEmpty(pluginsShow)){
             log.info(System.getProperty("line.separator")+""+getResourceFileAsText("banner/banner.txt"));
             JMeterUtils.setProperty("baolu-jmeter-plugins","show");
         }
         if (JMeter.isNonGUI()){
             String baseDir = org.apache.jmeter.services.FileServer.getFileServer().getBaseDir();
-            FileServer.getFileServer().setBasedir(baseDir);
+            server.setBasedir(baseDir);
         }else {
             String testPlanFile  = GuiPackage.getInstance().getTestPlanFile();
 //            File file = new File(testPlanFile);
 //            FileServer.getFileServer().setBaseForScript(file);
-            FileServer.getFileServer().setBasedir(testPlanFile);
+            server.setBasedir(testPlanFile);
         }
     }
 
@@ -214,8 +215,11 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
     public void testEnded() {
         curThreadsCsvFileData.clear();
+        FileServer server = FileServer.getFileServer();
+        server.getNewThreadNo().clear();
+        server.setGlobalCounter(1);
         try {
-            FileServer.getFileServer().closeFiles();
+            server.closeFiles();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -301,7 +305,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
 
         }
 
-        int startLine = server.getStartLine(context, blockSize);
+        int startLine = server.getStartLine(blockSize);
         if (curThreadsCsvFileData.get(threadNum) == null) {//判断当前线程分配的文件是否已经缓存
             String[] blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize);
             curThreadsCsvFileData.put(threadNum,blockPara);

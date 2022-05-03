@@ -3,8 +3,10 @@ package com.baolu.jmeter.services;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.baolu.jmeter.utils.BaoluUtils;
 import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
@@ -42,6 +44,10 @@ public class FileServer {
     private File base;
 
     private final Map<String, FileServer.FileEntry> files = new HashMap<>();
+
+    private final Map<String,Integer> newThreadNo = new ConcurrentHashMap<>();
+
+    private static int globalCounter = 1;
 
     private static final FileServer server = new FileServer();
 
@@ -598,9 +604,32 @@ public class FileServer {
      * @param blockSize block size for each threads
      * @return start line for each threads
      */
+    @Deprecated
     public int getStartLine(JMeterContext context, int blockSize){
         int curThreadNo = context.getThread().getThreadNum();
         return (curThreadNo * blockSize);
+    }
+
+    /**
+     * create by libaolu
+     * Reset thread number,there can only be one thread number 0
+     * key the original thread number and value the new thread number
+     * @param blockSize block size for each threads
+     * @return start line for each threads
+     */
+    public int getStartLine(int blockSize){
+        String multipleTgIndex = BaoluUtils.getMultipleTgIndex(Thread.currentThread().getName());
+        synchronized (this){
+            if (newThreadNo.get(multipleTgIndex) == null){//First judge whether the original thread number has been modified.
+                if(newThreadNo.size() == 0){
+                    newThreadNo.put(multipleTgIndex,0);//Multithreading does not need to care which thread arrives first.
+                }else {
+                    newThreadNo.put(multipleTgIndex,globalCounter);
+                    globalCounter +=1;
+                }
+            }
+            return newThreadNo.get(multipleTgIndex) * blockSize;
+        }
     }
 
     /**
@@ -645,5 +674,13 @@ public class FileServer {
             e.printStackTrace();
         }
         return rows;
+    }
+
+    public void setGlobalCounter(int globalCounter) {
+        this.globalCounter = globalCounter;
+    }
+
+    public Map<String, Integer> getNewThreadNo() {
+        return newThreadNo;
     }
 }
