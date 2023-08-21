@@ -201,11 +201,17 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         if (JMeter.isNonGUI()){
             String baseDir = org.apache.jmeter.services.FileServer.getFileServer().getBaseDir();
             server.setBasedir(baseDir);
-        }else {
-            String testPlanFile  = GuiPackage.getInstance().getTestPlanFile();
-//            File file = new File(testPlanFile);
-//            FileServer.getFileServer().setBaseForScript(file);
-            server.setBasedir(testPlanFile);
+        } else {
+            GuiPackage gp = GuiPackage.getInstance();
+            if (gp == null ){
+                String baseDir = org.apache.jmeter.services.FileServer.getFileServer().getBaseDir();
+                server.setBasedir(baseDir);
+            }else {
+                String testPlanFile  = GuiPackage.getInstance().getTestPlanFile();
+//                File file = new File(testPlanFile);
+//                FileServer.getFileServer().setBaseForScript(file);
+                server.setBasedir(testPlanFile);
+            }
         }
     }
 
