@@ -563,13 +563,19 @@ public class FileServer {
      * @param blockSize block size for each threads
      * @return
      */
-    public synchronized String[] readLineBlock(String fileName, boolean recycle, boolean firstLineIsNames, int startNumber, int blockSize){
+    public synchronized String[] readLineBlock(String fileName, boolean recycle, boolean firstLineIsNames, int startNumber, int blockSize ,String charsetName){
         File file = resolveFileFromPath(fileName);
-        FileReader in = null;
         String[] paramArr = null;
+        InputStreamReader isr = null;
+        // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         try {
-            in = new FileReader(file);
-            LineNumberReader reader = new LineNumberReader(in);
+            FileInputStream fis = new FileInputStream(file);
+            if(!JOrphanUtils.isBlank(charsetName)) {
+                isr = new InputStreamReader(fis, charsetName);
+            } else {
+                isr = new InputStreamReader(fis);
+            }
+            LineNumberReader reader = new LineNumberReader(isr);
             String s = null;
             if (firstLineIsNames)
                 s = reader.readLine();
@@ -590,7 +596,7 @@ public class FileServer {
                     if (p == k) break;
                 }
                 reader.close();
-                in.close();
+                isr.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
