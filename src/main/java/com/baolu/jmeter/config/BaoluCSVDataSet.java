@@ -2,7 +2,6 @@ package com.baolu.jmeter.config;
 
 import com.baolu.jmeter.services.FileServer;
 import com.baolu.jmeter.utils.BaoluUtils;
-import net.sf.saxon.trans.SymbolicName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -88,7 +87,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     /**
      * Thread data
      */
-    private final Map<Integer,String[]> curThreadsCsvFileData = new ConcurrentHashMap<>();
+    private final Map<String,String[]> curThreadsCsvFileData = new ConcurrentHashMap<>();
 
     /**
      * End of file flag
@@ -244,9 +243,9 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         if ((curParaPos.get() == null)){
             curParaPos.set(1);
         }
-        int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
+        String multipleTgIndex = BaoluUtils.getMultipleTgIndex(Thread.currentThread().getName());
         if (getStopThread()){
-            String[] paraArrOld = curThreadsCsvFileData.get(threadNum);
+            String[] paraArrOld = curThreadsCsvFileData.get(multipleTgIndex);
             /**
               * For per thread of str array connect PARAMS_EOF array only when
               * reached End of per thread of str array stop thread.Prevent the
@@ -257,10 +256,10 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
                 String[] paraArrNew = new String[paraArrOld.length + 1];
                 System.arraycopy(paraArrOld, 0, paraArrNew, 0, paraArrOld.length);
                 System.arraycopy(PARAMS_EOF, 0, paraArrNew, paraArrOld.length, PARAMS_EOF.length);
-                curThreadsCsvFileData.put(threadNum,paraArrNew);
+                curThreadsCsvFileData.put(multipleTgIndex,paraArrNew);
             }
         }
-        String[] paraArr = curThreadsCsvFileData.get(threadNum);
+        String[] paraArr = curThreadsCsvFileData.get(multipleTgIndex);
         String[] params = JOrphanUtils.split(paraArr[(curParaPos.get() - 1)], delim, false);
         if (curParaPos.get() == paraArr.length) {
             if (getStopThread()){
@@ -293,7 +292,7 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
     public void getThreadsBlockData(FileServer server,boolean recycle, boolean ignoreFirstLine){
         JMeterContext context = getThreadContext();
         String fileName = getFilename().trim();
-        int threadNum = BaoluUtils.getThreadIndex(Thread.currentThread().getName());
+        String multipleTgIndex = BaoluUtils.getMultipleTgIndex(Thread.currentThread().getName());
         int totalLines = server.getCsvFileRows(fileName, ignoreFirstLine);
         int blockSize;
 
@@ -312,9 +311,9 @@ public class BaoluCSVDataSet extends ConfigTestElement implements TestBean,LoopI
         }
 
         int startLine = server.getStartLine(blockSize);
-        if (curThreadsCsvFileData.get(threadNum) == null) {//判断当前线程分配的文件是否已经缓存
+        if (curThreadsCsvFileData.get(multipleTgIndex) == null) {//判断当前线程分配的文件是否已经缓存
             String[] blockPara = server.readLineBlock(fileName, recycle, ignoreFirstLine, startLine, blockSize, getFileEncoding());
-            curThreadsCsvFileData.put(threadNum,blockPara);
+            curThreadsCsvFileData.put(multipleTgIndex,blockPara);
             if (log.isDebugEnabled()){
                 log.debug("current threadNum [{}],blockPara is [{}]",Thread.currentThread().getName(),blockPara);
             }

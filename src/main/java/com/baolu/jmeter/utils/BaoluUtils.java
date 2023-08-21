@@ -22,6 +22,7 @@ public class BaoluUtils {
      * @param JMeterThreadName Thread Group 1-1
      * @return The thread index of the current single thread group
      */
+    @Deprecated
     public static int getThreadIndex(String JMeterThreadName){
         String index = JMeterThreadName.substring(JMeterThreadName.lastIndexOf('-') + 1);
         return Integer.parseInt(index);
@@ -30,18 +31,10 @@ public class BaoluUtils {
     /**
      *
      * @param JMeterThreadName Thread Group 1-1
-     * @return The thread index of the current multiple thread groups
+     * @return The thread index of the current multiple thread groups 1-1、1-n、2-1、2-n
      */
     public static String getMultipleTgIndex(String JMeterThreadName){
-        String[] tgArr = JMeterThreadName.split(" ");
-        String multipleTgIndex = null;
-        for (String tmp : tgArr) {
-            if (tmp.contains("-")){
-                multipleTgIndex = tmp;
-                break;
-            }
-        }
-       return multipleTgIndex;
+        return JMeterThreadName.substring(JMeterThreadName.lastIndexOf(' ') + 1);
     }
 
     public static String getResourceFileAsText(String name) {
